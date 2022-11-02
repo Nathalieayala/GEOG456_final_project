@@ -49,7 +49,7 @@ var myStyle = {
 
 function makeLeafletMap(data){ // this would be the function that would change the vector displayed in the map. 
     console.log(data) // I have a console so you can see that the geojson appears as a JSON object 
-     drought.remove()
+    drought.remove()
     var drought = L.geoJson(data, {style: myStyle}).addTo(map)
 }
  //function moveSlider(value){
