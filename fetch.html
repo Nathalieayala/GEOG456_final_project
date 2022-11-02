@@ -1,0 +1,64 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEOG 456 Project Report I</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+    integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+     integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+     crossorigin=""></script>
+</head>
+<body>
+<br>
+<h3 id="years">Date</h3>
+<input id="myRange" type="range" name="season" value="0" max="22" oninput="makeLeafletMap(this.data)">
+</br>
+
+<div id="map"></div>
+<script>
+
+var myStyle = {
+"color": "#ff7800",
+"weight": 0.25,
+"opacity": 0.65
+};
+
+const sURL = 'https://www.ncei.noaa.gov/pub/data/nidis/geojson/us/usdm/historical/usdm-geojson/geo-simplified/USDM-';
+const eURL = '.geojson'
+
+    async function fetchFunction(date){ // you co
+    const fileURL = sURL + date + eURL;
+    const fetcher = await fetch(fileURL);
+    const data = await fetcher.json();
+    makeLeafletMap(data)
+};
+
+var map = L.map('map').setView([40.00, -102.15], 3);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    }).addTo(map);
+
+var myStyle = {
+    "color": "#ff7800",
+    "weight": 0.25,
+    "opacity": 0.65
+                };
+
+function makeLeafletMap(data){ // this would be the function that would change the vector displayed in the map. 
+    console.log(data) // I have a console so you can see that the geojson appears as a JSON object 
+     drought.remove()
+    var drought = L.geoJson(data, {style: myStyle}).addTo(map)
+}
+ //function moveSlider(value){
+   // var move = data[value]
+    //attempt = L.geoJson(mydata[0], {style:myStyle}).addTo(map)
+    //document.getElementByID('years').innerHTML = [value]
+ 
+fetchFunction('20000208') // this is the function that is called when you change the scroller. 
+
+</script>
+</body>
+</html>
