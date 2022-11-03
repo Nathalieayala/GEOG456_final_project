@@ -11,84 +11,110 @@
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
      integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
      crossorigin=""></script>
-    <script src="USDM20000926.js"></script>
-    <script src="USDM20001024.js"></script>
-    <script src="USDM20021022.js"></script>
-    <script src="USDM20031021.js"></script>
-    <script src="USDM20041026.js"></script>
-    <script src="USDM20051025.js"></script>
-    <script src="USDM20061024.js"></script>
-    <script src="USDM20071023.js"></script>
-    <script src="USDM20081028.js"></script>
-    <script src="USDM20091020.js"></script>
-    <script src="USDM20101026.js"></script>
-    <script src="USDM20111025.js"></script>
-    <script src="USDM20121023.js"></script>
-    <script src="USDM20131022.js"></script>
-    <script src="USDM20141028.js"></script>
-    <script src="USDM20151020.js"></script>
-    <script src="USDM20161025.js"></script>
-    <script src="USDM20171024.js"></script>
-    <script src="USDM20181023.js"></script>
-    <script src="USDM20191022.js"></script>
-    <script src="USDM20201027.js"></script>
-    <script src="USDM20211026.js"></script>
-    <script src="USDM20221018.js"></script>
+    <script src="../data/USDM20000926.js"></script>
+    <script src="../data/USDM20001024.js"></script>
+    <script src="../data/USDM20021022.js"></script>
+    <script src="../data/USDM20031021.js"></script>
+    <script src="../data/USDM20041026.js"></script>
+    <script src="../data/USDM20051025.js"></script>
+    <script src="../data/USDM20061024.js"></script>
+    <script src="../data/USDM20071023.js"></script>
+    <script src="../data/USDM20081028.js"></script>
+    <script src="../data/USDM20091020.js"></script>
+    <script src="../data/USDM20101026.js"></script>
+    <script src="../data/USDM20111025.js"></script>
+    <script src="../data/USDM20121023.js"></script>
+    <script src="../data/USDM20131022.js"></script>
+    <script src="../data/USDM20141028.js"></script>
+    <script src="../data/USDM20151020.js"></script>
+    <script src="../data/USDM20161025.js"></script>
+    <script src="../data/USDM20171024.js"></script>
+    <script src="../data/USDM20181023.js"></script>
+    <script src="../data/USDM20191022.js"></script>
+    <script src="../data/USDM20201027.js"></script>
+    <script src="../data/USDM20211026.js"></script>
+    <script src="../data/USDM20221018.js"></script>
 </head>
-<style>
-    #map {
-        width: 100%;
-        height: 500px;
-    }
-</style>
+    <style>
+        #map {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
 
 <body>
-<br>
 In my project on droughts, I have downloaded data from the USDM around weeks of September and October.
 This gave me twenty-three datasets to work with. I changed the geojson to js and used a relative path 
 in javascript to reach the datasets in the html. I displayed the data on a map which I used leafelet to 
 display on the html. I also added the slider to go through the dataset. I now need to change colors, on 
 how I can show the severity of the droughts. I also need to label the weeks and years on which dataset
 is displaying. Also, any tips on what I can add or improve would be greatly appreciated!
-<h3 id="theSeasonH3elementID">Years</h3>
+<h3 id="yearID">Years</h3>
 <input id="myRange" type="range" name="season" value="0" min="0" max="22" oninput="moveSlider(this.value)">
-</br>
 
-<div id="map"></div>
+
+    <div id="map"></div>
 <script>
-    var map = L.map('map').setView([40.00, -102.15], 3);
-
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// Next steps: figure out how to filter features with OBJECTID to differentiate style
+//Figure out the fetch?!?
+// how can I make the polygons change with every code
+var map = L.map('map').setView([40.00, -102.15], 3);
+        
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     }).addTo(map);
+    //L.geoJSON(five).addTo(map)
+
+function getColor(d) {
+    return d > 1 ? '#ffeda0' :
+           d > 2 ? '#feb24c0' :
+                    '#f03b20';
+}
+function style(feature) {
+    return{
+        fillColor: getColor(feature.properties.density),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+//  let object = {
+//     "type": "FeatureCollection",
+//  };
+//  L.geoJSON(object).addTo(map);
+
+
+//I attempted to look at leaflet but I struggled to figure out how to get coordinates
+// function getcoordinatesofdrought(evt) {
+//     var features = evt.features;
+//     features.forEach(feature) = {
+//         coordinates = feature.getGeometry().getCoordinates();
+//         console.log(coordinates);
+//     });
+// }
+
 
 var mydata = [one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twenty_one, twenty_two, twenty_three]
 var order = ['Week of September 26, 2000', 'October 24, 2000', 'October 22, 2000', 'October 21, 2003', 'October 26, 2004', 'October 25, 2005', 'October 24, 2006', 'October 23, 2007', 'October 28, 2008', 'October 20, 2009', 
 'October 26, 2010', 'October 25, 2011', 'October 23, 2012', 'October 22, 2013', 'October 28, 2014', 'October 20, 2015', 'October 25, 2016', 'October 24, 2017', 'October 23, 2018', 'October 22, 2019', 'October 27, 2020', 'October 26, 2021', 'October 18, 2022']
+var drought = L.geoJSON(mydata[0], {style: style}).addTo(map);
 
-function getColor(d) {
-    return d == 1 ? '#ffffd4' :
-           d == 2 ? '#fed98e' :
-           d == 3 ? '#fe9929' :
-                    '#cc4c02';
 
-};
-function style(feature) {
-    return{
-        fillColor: getColor(feature.properties.OBJECTID), //We need to do something here where the lines change with the map
-        weight: 2,
-        opacity: 1,
-        color:'orange',
-        dashArray: '2',
-        fillOpacity: 0.1
-    };
-};
 
+// function show_geojson() {
+//     layers.clearLayers();
+//     let txt = document.getElementById("geometry").value;
+//     txt = JSON.parse(txt);
+//     L.geoJSON(txt).addTolayers
+// }
 
 function moveSlider(value){
     var season = mydata[value]
-    //drought.remove()
-    drought = L.geoJson(mydata[0], {style: style}).addTo(map)
-    document.getElementById('theSeasonH3elementID').innerHTML = order[value]
+    drought.remove()
+    drought = L.geoJSON(season, {style: style}).addTo(map)
+    document.getElementById('yearID').innerHTML = order[value]
 }
 moveSlider(0)
 
