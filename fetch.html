@@ -40,22 +40,66 @@
         margin-right: 8px;
         opacity: 0.7;
     }
+    .slidecontainer {
+  width: 1000px;
+}
+.slider {
+  -webkit-appearance: none;
+  width: 1000px;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #e2963f;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #e2963f;
+  cursor: pointer;
+}
     #map {
         width: 1000px;
         height: 500px;
         background-color: aquamarine;
+    }
+    #description {
+        border: 1px solid lightsalmon;
+        width: 1000px;
+        height: 80px;
+        background-color: gainsboro;
     }
 </style>
 
 <body>
     <h1>US Weekly Drought Severity</h1>
  <h3 id="years">Date</h3>
-<input id="myRange" type="range" name="season" value="0" max="54" oninput="sliderChange(this.value)">
+<input id="myRange" type="range" name="season" value="0" max="1192" class="slider" oninput="sliderChange(this.value)">
 </br>
 <div class="legend"></div>
 <div id="map"></div>
  
-
+<br>
+<div id="description">This geovisualization was inspired by the <i>Tracking U.S. Drought Severity </i> by <a href="http://vis.ecowest.org/interactive/drought.php">EcoWest</a>. 
+    This visualization display the USDM datasets that have been collected for over 22 years. According to the <b>National Drought Mitigation Center</b>, the 
+    drought severity categories are based on local reports from more than 350 observers around the country. 0-1 represent 'abnormally dry (D0)' which indicates 
+    areas going into or coming out of drought. The other are levels of drought: 1-2 (moderate), 2-3 (severe), and 3+ (exceptional). 
+</div>
 
 <script>
 
@@ -91,7 +135,7 @@ const eURL = '.geojson'
 // 'November 21, 2000', 'November 28, 2000', 'December 5, 2000', 'December 12, 2000', 'December 19, 2000', 'December 26, 2000', 'January 2, 2001', 'January 9, 2001',
 // 'January 16, 2001']
 
-
+ var months = ['January', 'Febuaray', 'March', 'April', 'May', 'June', 'July','August', 'September', 'October', 'November', 'December']
 //const display = L.geoJSON(datDatesArray[0], {style: myStyle}).addTo(map);
 //fetchFunction(0)
 
@@ -100,7 +144,6 @@ function sliderChange(value){
     // var iterate = datDatesArray[value] 
     // document.getElementById('years').innerHTML = order[value]
     // fetchFunction(iterate)
-
 
     // we can create add 7 days to a calendar day starting from 20000104 
     // however that could be tricky and assumes that we have all the days 
@@ -112,11 +155,16 @@ function sliderChange(value){
     // Convert initalDay to milliseconds 
     // Add value * week of milliseconds (date)
     // Convert back to yyyymmdd format
-    const initialDay = 20000104
-    const date = 604800000
-
-    const selectedDate = initialDay.addMilliseconds(value*date)
-        fetchFunction(selectedDate)
+    //const initialDay = 20000104
+    var d = new Date("Tue Jan 04 2000 12:00:00 GMT-0500 (Eastern Standard Time)");
+    d.setDate(d.getDate() + 7*value)
+    var date = d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()
+    var text = months[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear()
+    document.getElementById("years").innerHTML = text
+    //const date = 604800000
+    //console.log(date)
+    //const selectedDate = initialDay.getMilliseconds(value*date)
+        fetchFunction(date)
     
     //    const selectedDate = initialDay + (new Date(date) * value)
     //    fetchFunction(selectedDate)
@@ -152,7 +200,7 @@ function myStyle(feature) {
 var drought = undefined;
 
 function makeLeafletMap(data){ // this would be the function that would change the vector displayed in the map. 
-    console.log(data) // I have a console so you can see that the geojson appears as a JSON object 
+    //console.log(data) // I have a console so you can see that the geojson appears as a JSON object 
     myData = data
     if (drought != undefined) {drought.remove()}
     drought = L.geoJSON(myData, {style:myStyle}).addTo(map)
